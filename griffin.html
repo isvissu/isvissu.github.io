@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+		<meta charset="utf-8">
+		<title>Group Route Finder</title>
+		<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="griffin.js"></script>
+	</head>
+
+	<body>
+		<div class="container">
+			<div style="margin-left: 100px; width: 100%">
+				<img src="griffin.jpg" width="200" height="100"></img>
+				<div style="display: inline-block; vertical-align:middle; text-align: center;">
+					<h1 style="font-size: 60px">GRifFIN</h1>
+					<h5 style="text-align: center; font-size: 20px; border-top: solid 1px; padding-top: 10px">Group Route FINder</h5>
+					<button class="btn btn-info">About</button>
+					<button class="btn btn-info">Credits</button>
+				</div>
+			</div>
+			<hr/>
+			<div id="left-pane" class="span3" style="margin-left: 0">
+				<p>
+					<button type="button" class="btn btn-primary" onclick="addInput();">Add Source</button>
+					<button type="button" class="btn btn-primary" onclick="removeInput();">Remove Source</button>
+				</p>
+
+				<div id="source-panel" style="margin-bottom: 10px">
+					<div>
+						<label>Source1:</label>
+						<input type="text" class="location-input source" />
+						<select class="mode" onchange="submitform();">
+				      <option value="DRIVING">Driving</option>
+				      <option value="WALKING">Walking</option>
+				      <option value="BICYCLING">Bicycling</option>
+				      <option value="TRANSIT">Public Transit</option>
+				    </select>
+					</div>
+				</div>
+				<div id="destination-panel" style="margin-top: 40px; margin-bottom: 40px">
+					<label>Destination:</label>
+					<input type="text" class="location-input" id="end" />
+				</div>
+
+				<button type="button" class="span2 btn btn-success" onclick="submitform();">Get routes</button>
+				
+			</div>
+			<div id="map-canvas" class="span9" style="min-height: 600px">Loading Google Map Api..</div>
+		 </div>
+		 <!--<div align='right'><img src="http://www.easycounter.com/counter.php?coolhangingsam" border="0" alt="Web Counters" style="visibility:hidden"></div> -->
+		 <div align='right'><img src="http://www.easycounter.com/counter.php?coolhangingsam" border="0" alt="Web Counters" ></div>
+	</body>
+</html>
