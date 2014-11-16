@@ -17,11 +17,11 @@ var directionsDisplayArr=new Array();
 	var routeChoice;
 
 	function initialize() {
-		var mumbai = new google.maps.LatLng(19, 73);
+		var hyd = new google.maps.LatLng(17.3, 78.4);
 		var mapOptions = {
 			zoom:7,
 			mapTypeId: google.maps.MapTypeId.ROADMAP,
-			center: mumbai
+			center: hyd
 		}
 		map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 		stepDisplay=new google.maps.InfoWindow();
@@ -36,23 +36,23 @@ var directionsDisplayArr=new Array();
 		optimize = !optimize;
 		submitform();
 	}
-	
+
 	function processRoutes() {
 		for (var i=0; i<nRoutes; i++) {
 			if (responseArr[i].routes.length < 2) {
 				responseArr[i].routes[1] = responseArr[i].routes[0];
 			}
 		}
-	
+
 		fillCommonPoints(0,0);
 		fillCommonPoints(0,1);
 		fillCommonPoints(1,0);
 		fillCommonPoints(1,1);
-		
+
 		if (optimize) {
 			getRouteChoice();
 		}
-	
+
 		var elem,steps=new Array(nRoutes);
 		for(var i=0; i<nRoutes; i++) {
 			elem=responseArr[i];
@@ -63,12 +63,12 @@ var directionsDisplayArr=new Array();
 				findMeetingPoint(steps[i], steps[j]);
 			}
 		}
-		
+
 		for (var i=0; i<nRoutes; i++) {
 			responseArr[i].routes[0] = responseArr[i].routes[routeChoice[i]];
 			directionsDisplayArr[i].setDirections(responseArr[i]);
 		}
-		
+
 		var endpos = responseArr[0].routes[routeChoice[0]].legs[0].end_location;
 		endmarker = new google.maps.Marker({
 			position: endpos,
@@ -78,7 +78,7 @@ var directionsDisplayArr=new Array();
 		});
 		endmarker.addListener("dragend",setEndMarkerFunction);
 		attachInstructionText(endmarker, end);
-		
+
 		for(var i=0;i<nRoutes;i++){
 			var startpos = responseArr[i].routes[routeChoice[i]].legs[0].start_location;
 			startmarker[i] = new google.maps.Marker({
@@ -90,11 +90,11 @@ var directionsDisplayArr=new Array();
 			startmarker[i].addListener("dragend",setMarkerFunction);
 			attachInstructionText(startmarker[i], starts[i]);
 		}
-		
-		
-		
+
+
+
 	}
-	
+
 	function getCommonPoints(i,j,m,n) {
 		if (m==0 && n==0)  commonPoints = commonPoints00;
 		if (m==0 && n==1)  commonPoints = commonPoints01;
@@ -102,7 +102,7 @@ var directionsDisplayArr=new Array();
 		if (m==1 && n==1)  commonPoints = commonPoints11;
 		return commonPoints[i][j];
 	}
-	
+
 	function getRouteChoice() {
 		var maxVal=0;
 		var index=0;
@@ -124,14 +124,14 @@ var directionsDisplayArr=new Array();
 			routeChoice[i] = (Math.floor(index/Math.pow(2,nRoutes-i-1)))%2;
 		}
 	}
-	
+
 	function fillCommonPoints(m, n) {
 		var commonPoints;
 		if (m==0 && n==0)  commonPoints = commonPoints00;
 		if (m==0 && n==1)  commonPoints = commonPoints01;
 		if (m==1 && n==0)  commonPoints = commonPoints10;
 		if (m==1 && n==1)  commonPoints = commonPoints11;
-		
+
 		var foundMeetingPoint = false;
 		for (var p=0; p<nRoutes; p++) {
 			for (var q=0; q<nRoutes; q++) {
@@ -161,7 +161,7 @@ var directionsDisplayArr=new Array();
 			}
 		}
 	}
-	
+
 	function findMeetingPoint(steps1, steps2) {
 		var foundMeetingPoint=false;
 		for(var i=0; i<steps1.length; i++){
@@ -202,22 +202,22 @@ var directionsDisplayArr=new Array();
 			else return ab;
 		}
 	}
-	
+
 	function getDistance(point1, point2) {
 		var lat1 = point1.jb * 3.14 / 180;
 		var lon1 = point1.kb * 3.14 / 180;
 		var lat2 = point2.jb * 3.14 / 180;
 		var lon2 = point2.kb * 3.14 / 180;
-		
+
 		var x = (lon2-lon1) * Math.cos((lat1+lat2)/2);
 		var y = (lat2-lat1);
 		var d = Math.sqrt(x*x + y*y) * 6371000;
 		return d;
-	} 
-	
+	}
+
 	function getMultipleRoute() {
 		var requestarr=new Array();
-		
+
 		for (i=0;i<starts.length;i++) {
 			requestarr.push({
 				origin:starts[i],
@@ -226,7 +226,7 @@ var directionsDisplayArr=new Array();
 				travelMode: google.maps.DirectionsTravelMode[modes[i]]
 			});
 		}
-		
+
 		request = null;
 		directionsDisplayArr= new Array();
 		var j=0;
@@ -234,7 +234,7 @@ var directionsDisplayArr=new Array();
 			request = requestarr[i];
 			directionsDisplayArr.push(new google.maps.DirectionsRenderer({ suppressMarkers: true}));
 			directionsDisplayArr[i].setMap(map);
-					
+
 			directionsService.route(request, function(response, status) {
 				if (status == google.maps.DirectionsStatus.OK) {
 						responseArr.push(response);
@@ -250,10 +250,10 @@ var directionsDisplayArr=new Array();
 	function getPlaceFromLatLong(position) {
 		return position.toString();
 	}
-	
+
 	function setMarkerFunction(){
 		var inputs = document.getElementsByClassName("source");
-	
+
 		for(var i=0;i<nRoutes;i++){
 			if(this.position.equals(startmarker[i].position)){
 				inputs[i].value=getPlaceFromLatLong(this.position);
@@ -276,14 +276,14 @@ var directionsDisplayArr=new Array();
 		attachInstructionText(marker, getRoadName(meetStep.instructions));
 		markerArr.push(marker);
 	}
-	
+
 	function getRoadName(str) {
 		var index1 = str.lastIndexOf("<b>");
 		var index2 = str.lastIndexOf("</b>");
 		var road = str.substr(index1, index2-index1+4);
 		return road;
 	}
-	
+
 	function showSteps(directionResult) {
 		var myRoute = directionResult.routes[0].legs[0];
 
@@ -302,22 +302,22 @@ function attachInstructionText(marker, text) {
 		stepDisplay.setContent(text);
 		stepDisplay.open(map, marker);
 	});
-} 
+}
 
 function deleteOverlays() {
 	for(var i=0;i<nRoutes;i++){
 		directionsDisplayArr[i].setMap(null);
-		
+
 	}
-	
+
 	for (var i=0;i<markerArr.length;i++){
 		markerArr[i].setMap(null);
 	}
-	
+
 	for (var i=0;i<startmarker.length;i++){
 		startmarker[i].setMap(null);
 	}
-	
+
 	if(endmarker){
 		endmarker.setMap(null);
 	}
@@ -329,7 +329,7 @@ function deleteOverlays() {
 
 function submitform() {
 	deleteOverlays();
-		
+
 	responseArr=new Array();
 	requestArr=new Array();
 	markerArr=new Array();
@@ -338,7 +338,7 @@ function submitform() {
 	modes=new Array();
 
 	directionsDisplayArr= new Array();
-	
+
 	var inputs = document.getElementsByClassName("source");
 	var modenodes = document.getElementsByClassName("mode");
 
@@ -413,5 +413,5 @@ function removeInput() {
 	if (sp.children.length>1)
 		sp.removeChild(sp.lastElementChild);
 }
-	
+
 google.maps.event.addDomListener(window, "load", initialize);
